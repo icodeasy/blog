@@ -38,7 +38,8 @@
 									<p>想要入市，但又不想成为韭菜，怎么办？</p>
 									<p>众多股票，我该怎么选择？</p>
 									<hr class="major" />
-									<h2></h2>
+									<h2>声明</h2>
+									<p>以下仅代表个人观点，</p>
 									<hr class="major" />
 
 									<h2>一些大家都知道的原则</h2>
@@ -81,7 +82,7 @@ for stock in all_stocks: # 遍历股票列表，查询盈利的企业
 									<p>然后筛选不被高估的</p>
 									<p>价格总是围绕着价值波动，因此我们应当避免去选择一些被高估的股票，比如指标市盈率便可以作为参考</p>
 									<pre><code>
-under_estimates = []
+under_estimate_stocks = []
 for stock in profit_stocks:
 	#### 获取沪深A股估值指标(日频)数据 ####
 	# peTTM    动态市盈率 p2越小越好
@@ -89,18 +90,53 @@ for stock in profit_stocks:
 	# pcfNcfTTM    市现率 p0越小越健康，风险越小
 	# pbMRQ    市净率 p1越低越好,泡沫越小
 	fields= "date,code,open, close, high,low,turn,peTTM,pbMRQ,psTTM,pcfNcfTTM, isST";
-	rs = bs.query_history_k_data(stock["code"],
-								 fields,
-								 start_date=day, end_date=day,
-								 frequency="d", adjustflag="3")
+	rs = bs.query_history_k_data(stock["code"], fields, start_date=day, end_date=day, frequency="d", adjustflag="3")
 	if (rs.error_code == '0') & rs.next():
 		row_data = map(map_basics, rs.get_row_data());
 		if pbMRQ < 10 and turn > 0.5 and peTTM > 0 and isST=0: # 根据自己的偏好调整
-			under_estimates.append(list(row_data))
+			under_estimate_stocks.append(list(row_data))
 									</code></pre>
 									<p>最后挑出刚被割过韭菜的</p>
 									<pre><code>
-
+bud_stocks = []
+for stock in under_estimate_stocks:
+	#### 获取沪深A股过去收盘数据 ####
+	# close 收盘价
+	fields = "date,code,close";
+	rs = bs.query_history_k_data(stock['code'],
+								 fields,
+								 start_date=start_day, end_date=end_day,
+								 frequency="d", adjustflag="3")
+	month_max = 0;  # 月最高价
+	month_min = sys.float_info.max;
+	month_avg = 0;
+	month_begin = 0;  # 月初价
+	month_end = 0;
+	rate = 0;
+	while (rs.error_code == '0') & rs.next():
+		row = rs.get_row_data();
+		close = float(row[2]);
+		if month_begin <= 0:
+			month_begin = close;
+		month_end = close;
+		if close > month_max:
+			month_max = close;
+		if close < month_min:
+			month_min = close;
+		if month_avg <= 0:
+			month_avg = close;
+		month_avg = (month_avg + close) / 2;
+	if (month_begin > 0):
+		rate = (month_end - month_begin) / month_begin;
+	bud_stocks.append([  # 根据rate，从跌的最惨的股票开始择机入场
+		end_day,
+		rate,
+		month_max,
+		month_avg,
+		month_min,
+		month_end,
+		int(time.time())
+	])
 									</code></pre>
 									<p>当然经过以上筛选购入的股票依然会有坑（入市需谨慎嘛）</p>
 									<hr class="major" />
