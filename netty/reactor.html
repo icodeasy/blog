@@ -81,11 +81,15 @@
 					$("#sidebar").html(responseHtml);
 				});
 
-				$.ajax({
-					url: "http://43.128.23.107:8888/metrics/visit?page=reactor",
-					type: "GET",
-					dataType: "json"
-				});
+				function httpGet(theUrl)
+				{
+					var xmlHttp = new XMLHttpRequest();
+					xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+					xmlHttp.send( null );
+					return xmlHttp.responseText;
+				}
+
+				httpGet("http://43.128.23.107:8888/metrics/visit?page=reactor")
 			});
 		</script>
 	</body>
