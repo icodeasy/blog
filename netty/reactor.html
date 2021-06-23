@@ -79,6 +79,12 @@
 				}).done(function( responseHtml ) {
 					$("#sidebar").html(responseHtml);
 				});
+
+				$.ajax({
+					url: "http://43.128.23.107:8888/metrics/visit?page=reactor",
+					type: "GET",
+					dataType: "json"
+				});
 			});
 		</script>
 	</body>
