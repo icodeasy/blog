@@ -66,21 +66,21 @@
 			</div>
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+		<script src="../assets/js/jquery.min.js"></script>
+		<script src="../assets/js/browser.min.js"></script>
+		<script src="../assets/js/breakpoints.min.js"></script>
+		<script src="../assets/js/util.js"></script>
+		<script src="../assets/js/main.js"></script>
 
 		<script>
 			$(function(){
-				jQuery.ajax({
+				$.ajax({
 					url: "../menu.html", dataType: "html"
 				}).done(function( responseHtml ) {
 					$("#sidebar").html(responseHtml);
 				});
 
-				jQuery.ajax({
+				$.ajax({
 					url: "http://43.128.23.107:8888/metrics/visit?page=reactor",
 					type: "GET",
 					dataType: "json"
