@@ -38,21 +38,36 @@
 
 									<hr class="major" />
 
-									<h2>Interdum sed dapibus</h2>
-									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit.</p>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.</p>
+									<h2>先提提IO模式</h2>
+									<p>值得注意的是，我们常说的'同步阻塞IO'模式中，同步和阻塞是完全独立的概念，不要混在一起理解！</p>
+									<p>阻塞和非阻塞</p>
+									<p>阻塞是指用户线程一直在等待，直到内核 IO 操作彻底完成，在这期间不能干别的事情。简单来说，就是线程执行一个函数时，一直等待到完全执行完成，在这之前一直等待</p>
+									<p>非阻塞是指用户线程拿到内核返回的状态值就返回自己的空间，干别的事情去了。简单来说，就是线程执行一个函数，立即返回，后续需要线程自己轮询查询函数的执行结果</p>
+									<p>同步和异步</p>
+									<p>同步是指用户空间主动发起请求给内核空间。</p>
+									<p>异步是指内核空间主动发起请求给用户空间。</p>
+									<p>这里只说同步非阻塞IO，根据以上概念，也就是用户空间发起请求给内核空间进行IO调用后立即返回，然后用户空间主动轮询查询IO调用结果</p>
+									<p>同步非阻塞IO的缺点</p>
+									<p>不断轮询内核，将会占用大量的 CPU 时间，浪费性能，效率低下，因此，在高并发的情况下，同步非阻塞模型也是不可用的。</p>
+									<p>为了解决轮询的缺点，</p>
 
 									<hr class="major" />
-
-									<h2>Magna etiam veroeros</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula.</p>
-									<p>Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.</p>
-
+									<h2>I/O 多路复用（ IO multiplexing）</h2>
+									<p>多路IO，如果各用户空间都各自轮询，那对于内核将是灾难，同时代码也是低内聚的，因此需要引入系统调用select or epoll单独完成轮询逻辑</p>
+									<p>需要一个单线程或进程和系统调用select or epoll 交互来完成IO事件分发</p>
+									<p>更详细的解释请参考<a href="https://segmentfault.com/a/1190000003063859">Linux IO模式及 select、poll、epoll详解</a> </p>
 									<hr class="major" />
 
-									<h2>Lorem aliquam bibendum</h2>
-									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit.</p>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula.</p>
+									<h2>反应堆设计模式的特点</h2>
+									<p>单线程处理IO</p>
+									<p>线程池处理IO事件</p>
+									<p>以上特点，可见该设计模式是面向IO编程，^_^</p>
+									<hr class="major" />
+									<h2>netty 的反应堆设计</h2>
+									<span class="image main"><img src="../images/netty/netty_reactor.jpeg" style="height: 450px;" alt="" /></span>
+									<p>由以上netty设计图可知，netty的IO核心</p>
+									<p>main reactor 负责与select or epoll 进行交互，监听IO就绪状态</p>
+									<p>sub reactor 负责IO的读与写</p>
 
 								</section>
 
