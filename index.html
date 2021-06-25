@@ -127,11 +127,11 @@
 											</ul>
 										</article>
 										<article>
-											<a href="#" class="image"><img src="images/pic02.jpg" alt="" /></a>
-											<h3>尽请期待</h3>
-											<p>尽情期待</p>
+											<a href="#" class="image"><img src="images/netty/netty_reactor.jpeg" alt="" /></a>
+											<h3>netty反应堆</h3>
+											<p>为啥要叫反应堆</p>
 											<ul class="actions">
-												<li><a href="#" class="button">More</a></li>
+												<li><a href="./qi/reactor.html" class="button">More</a></li>
 											</ul>
 										</article>
 									</div>
@@ -161,6 +161,10 @@
 				}).done(function( responseHtml ) {
 					$("#sidebar").html(responseHtml);
 				});
+
+				$.ajax({
+					url: "https://lifeasy.club/metrics/visit?page=index", dataType: "json"
+				})
 			});
 
 			function togglePopup() {
